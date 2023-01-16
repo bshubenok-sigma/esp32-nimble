@@ -46,8 +46,6 @@ impl BLEDevice {
         esp_idf_sys::esp_bt_mode_t_ESP_BT_MODE_CLASSIC_BT
       ));
 
-      esp_nofail!(esp_idf_sys::esp_nimble_hci_and_controller_init());
-
       esp_idf_sys::nimble_port_init();
 
       esp_idf_sys::ble_hs_cfg.sync_cb = Some(Self::on_sync);
