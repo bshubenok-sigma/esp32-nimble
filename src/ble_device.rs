@@ -30,18 +30,17 @@ pub struct BLEDevice {
 }
 
 impl BLEDevice {
-  fn init() {
+
+  pub fn deinit() {
+    unsafe {
+      SYNCED = false;
+      esp_idf_sys::nimble_port_deinit();
+    }
+  }
+
+  pub fn init() {
     // NVS initialisation.
     unsafe {
-      let result = esp_idf_sys::nvs_flash_init();
-      if result == esp_idf_sys::ESP_ERR_NVS_NO_FREE_PAGES
-        || result == esp_idf_sys::ESP_ERR_NVS_NEW_VERSION_FOUND
-      {
-        ::log::warn!("NVS initialisation failed. Erasing NVS.");
-        esp_nofail!(esp_idf_sys::nvs_flash_erase());
-        esp_nofail!(esp_idf_sys::nvs_flash_init());
-      }
-
       esp_nofail!(esp_idf_sys::esp_bt_controller_mem_release(
         esp_idf_sys::esp_bt_mode_t_ESP_BT_MODE_CLASSIC_BT
       ));
